@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPI & CPI Calculator</title>
+    <link rel="stylesheet" href="style5.css">
+</head>
+<body>
+    <div class="container">
+        <h1>SPI & CPI Calculator</h1>
+        <div id="semester-form">
+            <label for="numSemesters">Total Number of Semesters:</label>
+            <input type="number" id="numSemesters" min="1" required>
+            <button onclick="generateSemesterFields()">Continue</button>
+        </div>
+        <div id="previous-spi-form" style="display: none">
+            <div id="previous-semesters-container"></div>
+            <button onclick="proceedToCurrentSemester()">Continue to Current Semester</button>
+        </div>
+        <div id="current-semester-form" style="display: none">
+            <div id="subjects-input">
+                <label for="numSubjects">Number of Subjects in Current Semester:</label>
+                <input type="number" id="numSubjects" min="1" required>
+                <button onclick="generateSubjectFields()">Add Subjects</button>
+            </div>
+            <div id="subjects-container"></div>
+            <button onclick="calculateResults()" id="calculate-btn" style="display: none">Calculate Results</button>
+            <div id="result"></div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
