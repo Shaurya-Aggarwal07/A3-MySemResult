@@ -3,8 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPI & CPI Calculator</title>
-    <link rel="stylesheet" href="style5.css">
+    <title>Academic Performance Calculator</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Google fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-6NZGBMMM14"></script>
     <script>
@@ -16,28 +20,239 @@
     </script>
 </head>
 <body>
+    <header>
+        <div class="logo">
+            <i class="fas fa-graduation-cap"></i>
+            <span>Academic Calculator</span>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#" class="active">Calculator</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#help">Help</a></li>
+            </ul>
+        </nav>
+    </header>
+    
     <div class="container">
-        <h1>SPI & CPI Calculator</h1>
-        <div id="semester-form">
-            <label for="numSemesters">Total Number of Semesters:</label>
-            <input type="number" id="numSemesters" min="1" required>
-            <button onclick="generateSemesterFields()">Continue</button>
-        </div>
-        <div id="previous-spi-form" style="display: none">
-            <div id="previous-semesters-container"></div>
-            <button onclick="proceedToCurrentSemester()">Continue to Current Semester</button>
-        </div>
-        <div id="current-semester-form" style="display: none">
-            <div id="subjects-input">
-                <label for="numSubjects">Number of Subjects in Current Semester:</label>
-                <input type="number" id="numSubjects" min="1" required>
-                <button onclick="generateSubjectFields()">Add Subjects</button>
+        <div class="progress-bar">
+            <div class="step active" data-step="1">
+                <div class="step-icon">1</div>
+                <div class="step-text">Setup</div>
             </div>
-            <div id="subjects-container"></div>
-            <button onclick="calculateResults()" id="calculate-btn" style="display: none">Calculate Results</button>
-            <div id="result"></div>
+            <div class="step" data-step="2">
+                <div class="step-icon">2</div>
+                <div class="step-text">Previous Data</div>
+            </div>
+            <div class="step" data-step="3">
+                <div class="step-icon">3</div>
+                <div class="step-text">Current Sem</div>
+            </div>
+            <div class="step" data-step="4">
+                <div class="step-icon">4</div>
+                <div class="step-text">Results</div>
+            </div>
+        </div>
+
+        <div class="calculator-container">
+            <h1>Academic Performance Calculator</h1>
+            <p class="subtitle">Calculate your Semester Performance Index (SPI) and Cumulative Performance Index (CPI)</p>
+
+            <div id="semester-form" class="form-section active-section">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-cog"></i>
+                        <h2>Setup Your Calculation</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label for="numSemesters">Total Number of Semesters:</label>
+                            <input type="number" id="numSemesters" min="1" max="12" required>
+                            <p class="help-text">Include your current semester in the total</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="generateSemesterFields()">
+                            <i class="fas fa-arrow-right"></i> Continue
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="previous-spi-form" class="form-section">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-history"></i>
+                        <h2>Previous Semesters</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="previous-semesters-container"></div>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="goBack(1)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" onclick="proceedToCurrentSemester()">
+                                <i class="fas fa-arrow-right"></i> Continue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="current-semester-form" class="form-section">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="fas fa-book"></i>
+                        <h2>Current Semester</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="subjects-input">
+                            <div class="form-group">
+                                <label for="numSubjects">Number of Subjects in Current Semester:</label>
+                                <input type="number" id="numSubjects" min="1" max="15" required>
+                            </div>
+                            <button class="btn btn-secondary" onclick="generateSubjectFields()">
+                                <i class="fas fa-plus"></i> Add Subjects
+                            </button>
+                        </div>
+                        <div id="subjects-container" class="subjects-grid"></div>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="goBack(2)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" onclick="calculateResults()" id="calculate-btn" style="display: none">
+                                <i class="fas fa-calculator"></i> Calculate
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="results-section" class="form-section">
+                <div class="card result-card">
+                    <div class="card-header">
+                        <i class="fas fa-chart-bar"></i>
+                        <h2>Your Results</h2>
+                    </div>
+                    <div class="card-body">
+                        <div id="result" class="result-container"></div>
+                        <div class="visual-representation">
+                            <div class="chart-container">
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="goBack(3)">
+                                <i class="fas fa-arrow-left"></i> Back
+                            </button>
+                            <button class="btn btn-primary" onclick="startOver()">
+                                <i class="fas fa-redo"></i> Start Over
+                            </button>
+                            <button class="btn btn-success" onclick="printResults()">
+                                <i class="fas fa-print"></i> Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+    
+    <div class="section" id="about">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-info-circle"></i>
+                    <h2>About This Calculator</h2>
+                </div>
+                <div class="card-body">
+                    <p>This calculator helps students track their academic progress by calculating Semester Performance Index (SPI) and Cumulative Performance Index (CPI).</p>
+                    <p>The calculation is based on the credit system commonly used in universities across India, where:</p>
+                    <ul>
+                        <li>SPI (Semester Performance Index): Weighted average of grade points earned in a single semester.</li>
+                        <li>CPI (Cumulative Performance Index): Weighted average of grade points earned across all semesters.</li>
+                    </ul>
+                    <div class="grade-table">
+                        <h3>Grade Point Equivalents</h3>
+                        <table>
+                            <tr>
+                                <th>Grade</th>
+                                <th>Points</th>
+                                <th>Grade</th>
+                                <th>Points</th>
+                            </tr>
+                            <tr>
+                                <td>AA</td>
+                                <td>10</td>
+                                <td>CC</td>
+                                <td>6</td>
+                            </tr>
+                            <tr>
+                                <td>AB</td>
+                                <td>9</td>
+                                <td>CD</td>
+                                <td>5</td>
+                            </tr>
+                            <tr>
+                                <td>BB</td>
+                                <td>8</td>
+                                <td>DD</td>
+                                <td>4</td>
+                            </tr>
+                            <tr>
+                                <td>BC</td>
+                                <td>7</td>
+                                <td>FF</td>
+                                <td>0</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="help">
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-question-circle"></i>
+                    <h2>Help & FAQ</h2>
+                </div>
+                <div class="card-body">
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header">How do I calculate my SPI?</div>
+                            <div class="accordion-content">
+                                <p>SPI is calculated using the formula: (Sum of Grade Points × Credits) / Total Credits for that semester.</p>
+                                <p>For example, if you scored AA (10 points) in a 4-credit course and BB (8 points) in a 3-credit course, your SPI would be: (10×4 + 8×3) / (4+3) = 9.14</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header">How does CPI differ from SPI?</div>
+                            <div class="accordion-content">
+                                <p>CPI considers your performance across all semesters, while SPI only looks at one semester.</p>
+                                <p>CPI formula: (Sum of SPIs × Credits for each semester) / Total Credits across all semesters.</p>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <div class="accordion-header">Can I save my results?</div>
+                            <div class="accordion-content">
+                                <p>Currently, you can print your results or take a screenshot. We're working on adding a save feature in future updates.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2025 Academic Performance Calculator. Made with ❤️ by Shaurya Aggarwal</p>
+        </div>
+    </footer>
+    
+    <!-- Chart.js for visualizations -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
